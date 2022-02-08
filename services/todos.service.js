@@ -6,4 +6,7 @@ export default class TodoService {
         return axios.get('/todos')
     }
 
+    static async createTodo(params){
+        return axios.post('/todos',params)
+    }
 }
