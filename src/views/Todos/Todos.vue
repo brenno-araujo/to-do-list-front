@@ -9,9 +9,9 @@
         </div>
     </form>
 
-    <ul>
-        <li v-for="todo in todos" :key="todo.identify">
-            {{todo.name}}
+    <ul class="list-group">
+        <li v-for="todo in todos" :key="todo.identify" class="list-group-item">
+            {{todo.title}} - {{todo.completed}}
         </li>
     </ul>
     </div>
@@ -19,21 +19,24 @@
 </template>
 
 <script>
-    import { ref } from 'vue' 
+    import { onMounted, ref } from 'vue' 
+
+    import TodoService from '../../../services/todos.service'
+
     export default{
         name: 'todos',
-        setup(){
-            const todos = [
-                {name:'tarefa 01', completed: true},
-                {name:'tarefa 02', completed: true},
-                {name:'tarefa 03', completed: false}
-            ]
-
-            const name = ref('default')
-        return {
-            todos,
-            name
-        }
-        }
+            setup() {
+                const todos = ref([])
+                onMounted(() => {
+                    TodoService.getAll()
+                        .then(response => {
+                            todos.value = response.data.data
+                        })
+                        .catch(error => console.log(error))
+                })
+                return {
+                    todos
+                }
+            }
     }
 </script>
